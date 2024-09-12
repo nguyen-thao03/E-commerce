@@ -3,7 +3,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { server } from "../../server";
 
 const Login = () => {
@@ -23,7 +23,7 @@ const Login = () => {
       .then((res) => {
         toast.success("Đăng nhập thành công!");
         navigate("/");
-        window.location.reload();
+        window.location.reload(true);
       })
       .catch((err) => {
         toast.error(err.response.data.message);

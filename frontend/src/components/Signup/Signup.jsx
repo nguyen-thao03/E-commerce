@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
 import axios from "axios";
 import { server } from "../../server";
-import { toast } from 'react-toastify';
+import toast from "react-hot-toast";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
