@@ -170,7 +170,7 @@ router.get("/logout", isAuthenticated,catchAsyncErrors(async(req,res,next) => {
 
     res.status(201).json({
       success: true,
-      message: "Log out successful!"
+      message: "Đăng xuất thành công!"
     });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));

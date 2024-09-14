@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = ({ active }) => {
   return (
-    <div className={`${styles.normalFlex}`}>
+    <div className={`block 800px:${styles.normalFlex}`}>
       {navItems &&
         navItems.map((i, index) => (
           <div className="flex" key={index}>
@@ -14,8 +14,8 @@ const Navbar = ({ active }) => {
             <Link
               to={i.url}
               className={`${
-                active === index + 1 ? "text-[#17dd1f]" : "text-[#fff]"
-              } font-[500] px-6 cursor-pointer`}
+                active === index + 1 ? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"
+              } font-[500] px-6 cursor-pointer pb-[30px] 800px:pb-0`}
             >
               {i.title}
             </Link>
