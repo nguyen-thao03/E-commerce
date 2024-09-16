@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../../static/data";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import toast from "react-hot-toast";
+import { createProduct } from "../../redux/actions/productActions";
 
 const CreateProduct = () => {
   const { seller } = useSelector((state) => state.seller);
+  const { success, error } = useSelector((state) => state.products);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -17,9 +21,42 @@ const CreateProduct = () => {
   const [discountPrice, setDiscountPrice] = useState("");
   const [stock, setStock] = useState("");
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+    if (success) {
+      toast.success("Thêm sản phẩm thành công!");
+      navigate("/dashboard");
+      window.location.reload();
+    }
+  }, [dispatch, error, success]);
+
+  const handleImageChange = (e) => {
+    e.preventDefault();
+
+    let files = Array.from(e.target.files);
+    setImages((prevImages) => [...prevImages, ...files]);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const newForm = new FormData();
+    images.forEach((image) => {
+      newForm.append("images", image);
+    });
+    newForm.append("name", name);
+    newForm.append("description", description);
+    newForm.append("category", category);
+    newForm.append("tags", tags);
+    newForm.append("originalPrice", originalPrice);
+    newForm.append("discountPrice", discountPrice);
+    newForm.append("stock", stock);
+    newForm.append("shopId", seller._id);
+    dispatch(createProduct(newForm));
   };
+
   return (
     <div className="w-[90%] 800px:w-[50%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
       <h5 className="text-[30px] font-Poppins text-center">Thêm sản phẩm</h5>
@@ -44,14 +81,17 @@ const CreateProduct = () => {
           <label className="pb-2">
             Mô tả <span className="text-red-500">*</span>
           </label>
-          <input
+          <textarea
+            cols="30"
+            required
+            rows="8"
             type="text"
             name="description"
             value={description}
-            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            className="mt-2 appearance-none block w-full pt-2 px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Nhập mô tả sản phẩm..."
-          />
+          ></textarea>
         </div>
         <br />
         <div>
@@ -72,11 +112,9 @@ const CreateProduct = () => {
               ))}
           </select>
         </div>
-        <br/>
+        <br />
         <div>
-          <label className="pb-2">
-            Tags
-          </label>
+          <label className="pb-2">Tags</label>
           <input
             type="text"
             name="tags"
@@ -86,11 +124,9 @@ const CreateProduct = () => {
             placeholder="Nhập thẻ sản phẩm..."
           />
         </div>
-        <br/>
+        <br />
         <div>
-          <label className="pb-2">
-            Giá gốc
-          </label>
+          <label className="pb-2">Giá gốc</label>
           <input
             type="number"
             name="price"
@@ -100,7 +136,7 @@ const CreateProduct = () => {
             placeholder="Nhập giá sản phẩm..."
           />
         </div>
-        <br/>
+        <br />
         <div>
           <label className="pb-2">
             Giá (Khi giảm giá) <span className="text-red-500">*</span>
@@ -113,6 +149,56 @@ const CreateProduct = () => {
             onChange={(e) => setDiscountPrice(e.target.value)}
             placeholder="Nhập giá sản phẩm khi giảm giá..."
           />
+        </div>
+        <br />
+        <div>
+          <label className="pb-2">
+            Kho sản phẩm <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="number"
+            name="stock"
+            value={stock}
+            className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            onChange={(e) => setStock(e.target.value)}
+            placeholder="Nhập kho sản phẩm..."
+          />
+        </div>
+        <br />
+        <div>
+          <label className="pb-2">
+            Tải hình ảnh lên <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="file"
+            name=""
+            id="upload"
+            className="hidden"
+            multiple
+            onChange={handleImageChange}
+          />
+          <div className="w-full flex items-center flex-wrap">
+            <label htmlFor="upload">
+              <AiOutlinePlusCircle size={30} className="mt-3" color="#555" />
+            </label>
+            {images &&
+              images.map((i) => (
+                <img
+                  src={URL.createObjectURL(i)}
+                  key={i}
+                  alt=""
+                  className="h-[120px] w-[120px] object-cover m-2"
+                />
+              ))}
+          </div>
+          <br />
+          <div>
+            <input
+              type="submit"
+              value="Thêm"
+              className="mt-2 cursor-pointer appearance-none text-center block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
         </div>
       </form>
     </div>

@@ -22,7 +22,7 @@ export const loadUser = () => async (dispatch) => {
 
     dispatch({
       type: "LoadUserFail",
-      payload: errorMessage,
+      payload: error.response.data.message,
     });
   }
 };

@@ -32,6 +32,7 @@ const ShopLoginPage = React.lazy(() => import("./pages/ShopLoginPage"));
 
 const ShopDashboardPage = React.lazy(() => import("./pages/Shop/ShopDashboardPage"));
 const ShopCreateProduct = React.lazy(() => import("./pages/Shop/ShopCreateProduct"));
+const ShopAllProducts = React.lazy(() => import("./pages/Shop/ShopAllProducts"));
 
 const App = () => {
 
@@ -94,6 +95,11 @@ const App = () => {
               <Route path="/dashboard-create-product" element={
                 <SellerProtectedRoute>
                   <ShopCreateProduct />
+                </SellerProtectedRoute>
+              } />
+              <Route path="/dashboard-products" element={
+                <SellerProtectedRoute>
+                  <ShopAllProducts />
                 </SellerProtectedRoute>
               } />
             </Routes>
