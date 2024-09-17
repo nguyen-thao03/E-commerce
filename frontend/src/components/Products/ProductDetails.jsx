@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/styles";
 import {
@@ -7,6 +7,9 @@ import {
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProductsShop } from "../../redux/actions/productActions";
+import { backend_url, server } from "../../server";
 
 const ProductDetails = ({ data }) => {
   const [count, setCount] = useState(1);
@@ -14,10 +17,15 @@ const ProductDetails = ({ data }) => {
   const [select, setSelect] = useState(0);
   const navigate = useNavigate();
 
+  const { products } = useSelector((state) => state.products);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllProductsShop(data._id));
+  }, [dispatch,data]);
+
   const incrementCount = () => {
     setCount(count + 1);
   };
-
   const decrementCount = () => {
     if (count > 1) {
       setCount(count - 1);
@@ -25,58 +33,57 @@ const ProductDetails = ({ data }) => {
   };
 
   const handleMessageSubmit = () => {
-    navigate("/inbox?conversation=930y84h0wefhgra8w");
-  };
+    navigate("/inbox?conversation=507ebjver884ehfdjeriv84");
+  }
+
   return (
     <div className="bg-white">
       {data ? (
-        <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
+        <div className={`${styles.section} w-[90%] 800px:w-[80%] `}>
           <div className="w-full py-5">
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
                 <img
-                  src={data.image_Url[select].url}
+                  src={`${backend_url}${data && data.images[select]}`}
                   alt=""
                   className="w-[80%]"
                 />
                 <div className="w-full flex">
-                  <div
-                    className={`${
-                      select === 0 ? "border" : "null"
-                    } cursor-pointer`}
-                  >
-                    <img
-                      src={data?.image_Url[0].url}
-                      alt=""
-                      className="h-[200px]"
-                      onClick={() => setSelect(0)}
-                    />
-                  </div>
+                  {data &&
+                    data.images.map((i, index) => (
+                      <div
+                        className={`${
+                          select === 0 ? "border" : "null"
+                        } cursor-pointer`}
+                      >
+                        <img
+                          src={`${backend_url}${i}`}
+                          alt=""
+                          className="h-[200px] overflow-hidden mr-3 mt-3"
+                          onClick={() => setSelect(index)}
+                        />
+                      </div>
+                    ))}
                   <div
                     className={`${
                       select === 1 ? "border" : "null"
-                    } cursor-pointer`}
+                    } cursor-pointer `}
                   >
-                    <img
-                      src={data?.image_Url[1].url}
-                      alt=""
-                      className="h-[200px]"
-                      onClick={() => setSelect(1)}
-                    />
                   </div>
                 </div>
               </div>
-              <div className="w-full 800px:w-[50%] pt-5">
+              <div className="w-full 800px:w-[50%] pt-5 ">
                 <h1 className={`${styles.productTitle}`}>{data.name}</h1>
                 <p>{data.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    {data.discount_price} vnd
+                    {data.discountPrice}vnd
                   </h4>
                   <h3 className={`${styles.price}`}>
-                    {data.price ? data.price + "vnd" : null}
+                    {data.originalPrice ? data.originalPrice + "vnd" : null}
                   </h3>
                 </div>
+
                 <div className="flex items-center mt-12 justify-between pr-3">
                   <div>
                     <button
@@ -85,9 +92,11 @@ const ProductDetails = ({ data }) => {
                     >
                       -
                     </button>
+
                     <span className="bg-gray-200 text-gray-800 font-medium px-4 py-[11px]">
                       {count}
                     </span>
+
                     <button
                       className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
                       onClick={incrementCount}
@@ -95,6 +104,7 @@ const ProductDetails = ({ data }) => {
                       +
                     </button>
                   </div>
+
                   <div>
                     {click ? (
                       <AiFillHeart
@@ -109,33 +119,40 @@ const ProductDetails = ({ data }) => {
                         size={30}
                         className="cursor-pointer"
                         onClick={() => setClick(!click)}
-                        color={click ? "red" : "#333"}
-                        title="Thêm vào danh sách yêu thích"
+                        title="Thêm vào yêu thích"
                       />
                     )}
                   </div>
                 </div>
                 <div
                   className={`${styles.button} !mt-6 !rounded !h-11 flex items-center`}
+                 
                 >
                   <span className="text-white flex items-center">
                     Thêm vào giỏ hàng <AiOutlineShoppingCart className="ml-1" />
                   </span>
                 </div>
                 <div className="flex items-center pt-8">
-                  <img
-                    src={data.shop.shop_avatar.url}
-                    alt=""
-                    className="w-[50px] h-[50px] rounded-full mr-2"
-                  />
+                  
+                    <img
+                      src={`${backend_url}${data?.shop?.avatar}`}
+                      alt=""
+                      className="w-[50px] h-[50px] rounded-full mr-2"
+                    />
+                  
+
                   <div className="pr-8">
-                    <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                      {data.shop.name}
-                    </h3>
+                    
+                      <h3
+                        className={`${styles.shop_name} pb-1 pt-1`}
+                      >
+                        {data.shop.name}
+                      </h3>
                     <h5 className="pb-3 text-[15px]">
-                      ({data.shop.ratings}) Xếp hạng
+                      (4/5) Đánh giá
                     </h5>
                   </div>
+
                   <div
                     className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`}
                     onClick={handleMessageSubmit}
@@ -148,14 +165,20 @@ const ProductDetails = ({ data }) => {
               </div>
             </div>
           </div>
-          <ProductDetailsInfo data={data} />
+
+          <ProductDetailsInfo
+            data={data}
+            products={products}
+          />
+          <br />
+          <br />
         </div>
       ) : null}
     </div>
   );
 };
 
-const ProductDetailsInfo = ({ data }) => {
+const ProductDetailsInfo = ({ data,products }) => {
   const [active, setActive] = useState(1);
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded">
@@ -203,13 +226,7 @@ const ProductDetailsInfo = ({ data }) => {
       {active === 1 ? (
         <>
           <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-            Chi tiết sản phẩm là một...{" "}
-          </p>
-          <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-            Khách hàng hiểu rõ hơn về sản phẩm.
-          </p>
-          <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-            Khách hàng hiểu rõ hơn về sản phẩm.
+            {data.description}
           </p>
         </>
       ) : null}
@@ -223,33 +240,33 @@ const ProductDetailsInfo = ({ data }) => {
       {active === 3 && (
         <div className="w-full block 800px:flex p-5">
           <div className="w-full 800px:w-[50%]">
-            <div className="flex items-center">
+           <Link to={`/shop/preview/${data.shop._id}`}>
+           <div className="flex items-center">
               <img
-                src={data.shop.shop_avatar.url}
+                src={`${backend_url}${data?.shop?.avatar}`}
                 className="w-[50px] h-[50px] rounded-full"
                 alt=""
               />
               <div className="pl-3">
                 <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
                 <h5 className="pb-2 text-[15px]">
-                  ({data.shop.ratings}) Xếp hạng
+                  (4/5) Xếp hạng
                 </h5>
               </div>
             </div>
+           </Link>
             <p className="pt-2">
-              Lorem ipsum is placeholder text commonly used in the graphic,
-              print, and publishing industries for previewing layouts and visual
-              mockups.
+              {data.shop.description}
             </p>
           </div>
           <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
               <h5 className="font-[600]">
-                Đã tham gia vào:{" "}
-                <span className="font-[500]">14 tháng 3,2023</span>
+                Đã tham gia vào: 
+                <span className="font-[500]">{data.shop?.createdAt?.slice(0,10)}</span>
               </h5>
               <h5 className="font-[600] pt-3">
-                Tổng số sản phẩm: <span className="font-[500]">1,223</span>
+                Tổng số sản phẩm: <span className="font-[500]">{products && products.length}</span>
               </h5>
               <h5 className="font-[600] pt-3">
                 Tổng số đánh giá: <span className="font-[500]">324</span>
@@ -268,5 +285,6 @@ const ProductDetailsInfo = ({ data }) => {
     </div>
   );
 };
+
 
 export default ProductDetails;

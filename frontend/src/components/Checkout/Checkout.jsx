@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
 import { server } from "../../server";
-import  toast  from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const Checkout = () => {
     const { user } = useSelector((state) => state.user);

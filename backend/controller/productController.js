@@ -5,6 +5,8 @@ const Product = require("../model/productModel");
 const Shop = require("../model/shopModel");
 const router = express.Router();
 const { upload } = require("../multer");
+const fs = require("fs");
+const { isSeller } = require("../middleware/auth");
 
 //create product
 router.post(
@@ -57,10 +59,23 @@ router.get(
 // delete product of a shop
 router.delete(
   "/delete-shop-product/:id",
-  //isSeller,
+  isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
       const productId = req.params.id;
+
+      const productData = await Product.findById(productId);
+
+      productData.images.forEach((imageUrls) => {
+        const filename = imageUrls;
+        const filePath = `uploads/${filename}`;
+
+        fs.unlink(filePath, (err) => {
+          if(err) {
+            console.log(err);
+          }
+        });
+      });
 
       const product = await Product.findByIdAndDelete(productId);
 

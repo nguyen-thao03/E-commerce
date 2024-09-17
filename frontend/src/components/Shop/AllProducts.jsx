@@ -1,11 +1,12 @@
+import { Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect } from "react";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { deleteProduct, getAllProductsShop } from "../../redux/actions/productActions";
+import { getAllProductsShop } from "../../redux/actions/productActions";
+import { deleteProduct } from "../../redux/actions/productActions";
 import Loader from "../Layout/Loader";
-import { Button } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
 
 const AllProducts = () => {
   const { products, isLoading } = useSelector((state) => state.products);
@@ -62,8 +63,7 @@ const AllProducts = () => {
         return (
           <>
             <Link to={`/product/${params.id}`}>
-              <Button
-              onClick={() => handleDelete(params.id)}>
+              <Button>
                 <AiOutlineEye size={20} />
               </Button>
             </Link>
@@ -97,7 +97,7 @@ const AllProducts = () => {
       row.push({
         id: item._id,
         name: item.name,
-        price: item.discountPrice + "vnd",
+        price: "US$ " + item.discountPrice,
         Stock: item.stock,
         sold: item.sold_out,
       });
