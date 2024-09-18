@@ -6,13 +6,12 @@ import { RxPerson } from "react-icons/rx";
 import { Link, useNavigate } from "react-router-dom";
 import {
   MdOutlineAdminPanelSettings,
-  MdOutlinePassword,
   MdOutlineTrackChanges,
 } from "react-icons/md";
 import { TbAddressBook } from "react-icons/tb";
 import axios from "axios";
 import { server } from "../../server";
-import { toast } from "react-toastify";
+import  toast  from "react-hot-toast";
 import { useSelector } from "react-redux";
 
 const ProfileSidebar = ({ active, setActive }) => {
@@ -45,7 +44,7 @@ const ProfileSidebar = ({ active, setActive }) => {
             active === 1 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
-          Profile
+          Hồ sơ
         </span>
       </div>
 
@@ -59,7 +58,7 @@ const ProfileSidebar = ({ active, setActive }) => {
             active === 2 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
-          Orders
+          Đơn hàng
         </span>
       </div>
 
@@ -73,7 +72,7 @@ const ProfileSidebar = ({ active, setActive }) => {
             active === 3 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
-          Refunds
+          Hoàn tiền
         </span>
       </div>
 
@@ -87,7 +86,7 @@ const ProfileSidebar = ({ active, setActive }) => {
             active === 4 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
-          inbox
+          Tin nhắn
         </span>
       </div>
 
@@ -101,7 +100,7 @@ const ProfileSidebar = ({ active, setActive }) => {
             active === 5 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
-          Track Order
+          Theo dõi đơn hàng
         </span>
       </div>
 
@@ -116,7 +115,7 @@ const ProfileSidebar = ({ active, setActive }) => {
             active === 6 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
-          Change password
+          Đổi mật khẩu
         </span>
       </div>
 
@@ -130,7 +129,7 @@ const ProfileSidebar = ({ active, setActive }) => {
             active === 7 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
-          Address
+          Địa chỉ
         </span>
       </div>
 
@@ -149,7 +148,7 @@ const ProfileSidebar = ({ active, setActive }) => {
                 active === 8 ? "text-[red]" : ""
               } 800px:block hidden`}
             >
-              Admin Dashboard
+              Bảng điều khiển
             </span>
           </div>
         </Link>
@@ -165,7 +164,7 @@ const ProfileSidebar = ({ active, setActive }) => {
             active === 8 ? "text-[red]" : ""
           } 800px:block hidden`}
         >
-          loguot
+          Đăng xuất
         </span>
       </div>
     </div>

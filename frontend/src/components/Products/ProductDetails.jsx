@@ -10,18 +10,31 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsShop } from "../../redux/actions/productActions";
 import { backend_url, server } from "../../server";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../../redux/actions/wishlistActions";
+import { addToCart } from "../../redux/actions/cartActions";
+import toast from "react-hot-toast";
 
 const ProductDetails = ({ data }) => {
+  const { wishlist } = useSelector((state) => state.wishlist);
+  const { cart } = useSelector((state) => state.cart);
+  const { products } = useSelector((state) => state.products);
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
   const navigate = useNavigate();
-
-  const { products } = useSelector((state) => state.products);
   const dispatch = useDispatch();
+
   useEffect(() => {
-    dispatch(getAllProductsShop(data._id));
-  }, [dispatch,data]);
+    dispatch(getAllProductsShop(data && data?.shop._id));
+    if (wishlist && wishlist.find((i) => i._id === data?._id)) {
+      setClick(true);
+    } else {
+      setClick(false);
+    }
+  }, [data, wishlist]);
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -32,9 +45,36 @@ const ProductDetails = ({ data }) => {
     }
   };
 
+  const removeFromWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(removeFromWishlist(data));
+  };
+
+  const addToWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(addToWishlist(data));
+  };
+
+  // Add to cart
+  const addToCartHandler = (id) => {
+    const isItemExists = cart && cart.find((i) => i._id === id);
+
+    if (isItemExists) {
+      toast.error("Sản phẩm đã có trong giỏ hàng!");
+    } else {
+      if (data.stock < 1) {
+        toast.error("Số lượng sản phẩm có hạn!");
+      } else {
+        const cartData = { ...data, qty: count };
+        dispatch(addToCart(cartData));
+        toast.success("Thêm sản phẩm thành công!");
+      }
+    }
+  };
+
   const handleMessageSubmit = () => {
     navigate("/inbox?conversation=507ebjver884ehfdjeriv84");
-  }
+  };
 
   return (
     <div className="bg-white">
@@ -68,8 +108,7 @@ const ProductDetails = ({ data }) => {
                     className={`${
                       select === 1 ? "border" : "null"
                     } cursor-pointer `}
-                  >
-                  </div>
+                  ></div>
                 </div>
               </div>
               <div className="w-full 800px:w-[50%] pt-5 ">
@@ -110,7 +149,7 @@ const ProductDetails = ({ data }) => {
                       <AiFillHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={() => setClick(!click)}
+                        onClick={() => removeFromWishlistHandler(data)}
                         color={click ? "red" : "#333"}
                         title="Xóa khỏi danh sách yêu thích"
                       />
@@ -118,7 +157,7 @@ const ProductDetails = ({ data }) => {
                       <AiOutlineHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={() => setClick(!click)}
+                        onClick={() => addToWishlistHandler(data)}
                         title="Thêm vào yêu thích"
                       />
                     )}
@@ -126,31 +165,28 @@ const ProductDetails = ({ data }) => {
                 </div>
                 <div
                   className={`${styles.button} !mt-6 !rounded !h-11 flex items-center`}
-                 
+                  onClick={() => addToCartHandler(data._id)}
                 >
                   <span className="text-white flex items-center">
                     Thêm vào giỏ hàng <AiOutlineShoppingCart className="ml-1" />
                   </span>
                 </div>
                 <div className="flex items-center pt-8">
-                  
+                  <Link to={`/shop/preview/${data?.shop._id}`}>
                     <img
                       src={`${backend_url}${data?.shop?.avatar}`}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
-                  
+                  </Link>
 
                   <div className="pr-8">
-                    
-                      <h3
-                        className={`${styles.shop_name} pb-1 pt-1`}
-                      >
-                        {data.shop.name}
-                      </h3>
-                    <h5 className="pb-3 text-[15px]">
-                      (4/5) Đánh giá
-                    </h5>
+                  <Link to={`/shop/preview/${data?.shop._id}`}>
+                    <h3 className={`${styles.shop_name} pb-1 pt-1`}>
+                      {data.shop.name}
+                    </h3>
+                    </Link>
+                    <h5 className="pb-3 text-[15px]">(4/5) Đánh giá</h5>
                   </div>
 
                   <div
@@ -166,10 +202,7 @@ const ProductDetails = ({ data }) => {
             </div>
           </div>
 
-          <ProductDetailsInfo
-            data={data}
-            products={products}
-          />
+          <ProductDetailsInfo data={data} products={products} />
           <br />
           <br />
         </div>
@@ -178,7 +211,7 @@ const ProductDetails = ({ data }) => {
   );
 };
 
-const ProductDetailsInfo = ({ data,products }) => {
+const ProductDetailsInfo = ({ data, products }) => {
   const [active, setActive] = useState(1);
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded">
@@ -240,33 +273,34 @@ const ProductDetailsInfo = ({ data,products }) => {
       {active === 3 && (
         <div className="w-full block 800px:flex p-5">
           <div className="w-full 800px:w-[50%]">
-           <Link to={`/shop/preview/${data.shop._id}`}>
-           <div className="flex items-center">
-              <img
-                src={`${backend_url}${data?.shop?.avatar}`}
-                className="w-[50px] h-[50px] rounded-full"
-                alt=""
-              />
-              <div className="pl-3">
-                <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                <h5 className="pb-2 text-[15px]">
-                  (4/5) Xếp hạng
-                </h5>
+            <Link to={`/shop/preview/${data.shop._id}`}>
+              <div className="flex items-center">
+                <img
+                  src={`${backend_url}${data?.shop?.avatar}`}
+                  className="w-[50px] h-[50px] rounded-full"
+                  alt=""
+                />
+                <div className="pl-3">
+                  <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
+                  <h5 className="pb-2 text-[15px]">(4/5) Xếp hạng</h5>
+                </div>
               </div>
-            </div>
-           </Link>
-            <p className="pt-2">
-              {data.shop.description}
-            </p>
+            </Link>
+            <p className="pt-2">{data.shop.description}</p>
           </div>
           <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
               <h5 className="font-[600]">
-                Đã tham gia vào: 
-                <span className="font-[500]">{data.shop?.createdAt?.slice(0,10)}</span>
+                Đã tham gia vào:
+                <span className="font-[500]">
+                  {data.shop?.createdAt?.slice(0, 10)}
+                </span>
               </h5>
               <h5 className="font-[600] pt-3">
-                Tổng số sản phẩm: <span className="font-[500]">{products && products.length}</span>
+                Tổng số sản phẩm:{" "}
+                <span className="font-[500]">
+                  {products && products.length}
+                </span>
               </h5>
               <h5 className="font-[600] pt-3">
                 Tổng số đánh giá: <span className="font-[500]">324</span>
@@ -285,6 +319,5 @@ const ProductDetailsInfo = ({ data,products }) => {
     </div>
   );
 };
-
 
 export default ProductDetails;

@@ -34,7 +34,7 @@ const ShopLogin = () => {
         <div className='min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8'>
             <div className='sm:mx-auto sm:w-full sm:max-w-md'>
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                    Login to your Shop
+                    Đăng nhập Shop
                 </h2>
             </div>
             <div className='mt-8 sm:mx-auto sm:w-full sm:max-w-md'>
@@ -43,7 +43,7 @@ const ShopLogin = () => {
                         {/* Email */}
                         <div>
                             <label htmlFor="email" className='block text-sm font-medium text-gray-700'>
-                                Email address
+                                Email
                             </label>
                             <div className='mt-1'>
                                 <input
@@ -62,7 +62,7 @@ const ShopLogin = () => {
                         {/* Password */}
                         <div>
                             <label htmlFor="password" className='block text-sm font-medium text-gray-700'>
-                                Password
+                                Mật khẩu
                             </label>
                             <div className='mt-1 relative'>
                                 <input
@@ -91,8 +91,8 @@ const ShopLogin = () => {
                             </div>
                         </div>
                         {/* Remember Me and Forgot Password */}
-                        <div className={`${styles.noramlFlex} justify-between`}>
-                            <div className={`${styles.noramlFlex}`}>
+                        <div className={`${styles.normalFlex} justify-between`}>
+                            <div className={`${styles.normalFlex}`}>
                                 <input
                                     type="checkbox"
                                     name="remember-me"
@@ -100,7 +100,7 @@ const ShopLogin = () => {
                                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                                 />
                                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                                    Remember me
+                                    Nhớ tài khoản
                                 </label>
                             </div>
                             <div className='text-sm'>
@@ -108,7 +108,7 @@ const ShopLogin = () => {
                                     to="/forgot-password"
                                     className="font-medium text-blue-600 hover:text-blue-500"
                                 >
-                                    Forgot your password?
+                                    Quên mật khẩu?
                                 </Link>
                             </div>
                         </div>
@@ -117,13 +117,13 @@ const ShopLogin = () => {
                                 type='submit'
                                 className='group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700'
                             >
-                                Submit
+                                Đăng nhập
                             </button>
                         </div>
-                        <div className={`${styles.noramlFlex} w-full`}>
-                            <h4>Don't have an account?</h4>
+                        <div className={`${styles.normalFlex} w-full`}>
+                            <h4>Chưa có tài khoản?</h4>
                             <Link to="/shop-create" className="text-blue-600 pl-2">
-                                Sign Up
+                                Đăng ký
                             </Link>
                         </div>
                     </form>

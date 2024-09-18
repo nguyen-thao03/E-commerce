@@ -12,7 +12,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const { upload } = require("../multer");
 
 // create-shop
-router.post("/create-shop", upload.single("file"), async (req, res, next) => {
+router.post("/shop-create", upload.single("file"), async (req, res, next) => {
   try {
     const { email } = req.body;
     const sellerEmail = await Shop.findOne({ email });

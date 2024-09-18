@@ -52,25 +52,25 @@ const AllProducts = () => {
       minWidth: 130,
       flex: 0.6,
     },
-    {
-      field: "Preview",
-      flex: 0.8,
-      minWidth: 100,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/product/${params.id}`}>
-              <Button>
-                <AiOutlineEye size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
-    },
+    // {
+    //   field: "Preview",
+    //   flex: 0.8,
+    //   minWidth: 100,
+    //   headerName: "",
+    //   type: "number",
+    //   sortable: false,
+    //   renderCell: (params) => {
+    //     return (
+    //       <>
+    //         <Link to={`/product/${params.id}`}>
+    //           <Button>
+    //             <AiOutlineEye size={20} />
+    //           </Button>
+    //         </Link>
+    //       </>
+    //     );
+    //   },
+    // },
     {
       field: "Delete",
       flex: 0.8,
@@ -97,7 +97,7 @@ const AllProducts = () => {
       row.push({
         id: item._id,
         name: item.name,
-        price: "US$ " + item.discountPrice,
+        price: item.discountPrice + "vnd",
         Stock: item.stock,
         sold: item.sold_out,
       });

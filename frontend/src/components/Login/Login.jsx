@@ -4,7 +4,7 @@ import styles from "../../styles/styles";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../../server";
-import { toast } from "react-toastify";
+import  toast  from "react-hot-toast";
 
 
 const Login = () => {

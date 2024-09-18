@@ -1,19 +1,19 @@
 // navigation Data
 export const navItems = [
   {
-    title: "Home",
+    title: "Trang chủ",
     url: "/",
   },
   {
-    title: "Best Selling",
+    title: "Bán chạy",
     url: "/best-selling",
   },
   {
-    title: "Products",
+    title: "Sản phẩm",
     url: "/products",
   },
   {
-    title: "Events",
+    title: "Sự kiện",
     url: "/events",
   },
   {
