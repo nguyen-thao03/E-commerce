@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loader from "../Layout/Loader";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import { getAllOrdersOfShop } from "../../redux/actions/orderActions";
 
 const AllOrders = () => {
     const { orders, isLoading } = useSelector((state) => state.order);
@@ -18,16 +19,14 @@ const AllOrders = () => {
 
     const columns = [
         { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-
+    
         {
             field: "status",
             headerName: "Status",
             minWidth: 130,
             flex: 0.7,
             cellClassName: (params) => {
-                return params.getValue(params.id, "status") === "Delivered"
-                    ? "greenColor"
-                    : "redColor";
+                return params.value === "Delivered" ? "greenColor" : "redColor";
             },
         },
         {
@@ -37,7 +36,7 @@ const AllOrders = () => {
             minWidth: 130,
             flex: 0.7,
         },
-
+    
         {
             field: "total",
             headerName: "Total",
@@ -45,23 +44,20 @@ const AllOrders = () => {
             minWidth: 130,
             flex: 0.8,
         },
-
+    
         {
-            field: " ",
+            field: "actions",
             flex: 1,
             minWidth: 150,
             headerName: "",
-            type: "number",
             sortable: false,
             renderCell: (params) => {
                 return (
-                    <>
-                        <Link to={`/order/${params.id}`}>
-                            <Button>
-                                <AiOutlineArrowRight size={20} />
-                            </Button>
-                        </Link>
-                    </>
+                    <Link to={`/order/${params.row.id}`}>
+                        <Button>
+                            <AiOutlineArrowRight size={20} />
+                        </Button>
+                    </Link>
                 );
             },
         },

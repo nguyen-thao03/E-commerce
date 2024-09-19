@@ -10,20 +10,25 @@ import styles from "../styles/styles";
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
   const categoryData = searchParams.get("category");
-  const { allProducts, isLoading } = useSelector((state) => state.products);
+  const { allProducts, isLoading, error } = useSelector((state) => state.products); // Kiểm tra lỗi
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    if (categoryData === null) {
-      const d = allProducts;
-      setData(d);
-    } else {
-      const d =
-        allProducts && allProducts.filter((i) => i.category === categoryData);
-      setData(d);
+    // Log để kiểm tra
+    console.log("All Products:", allProducts);
+    console.log("Category Data:", categoryData);
+
+    if (allProducts) {
+      if (categoryData === null) {
+        setData(allProducts);
+      } else {
+        const filteredProducts = allProducts.filter(
+          (i) => i.category === categoryData
+        );
+        setData(filteredProducts);
+      }
     }
-    //    window.scrollTo(0,0);
-  }, [allProducts]);
+  }, [allProducts, categoryData]);
 
   return (
     <>
@@ -36,16 +41,23 @@ const ProductsPage = () => {
           <br />
           <div className={`${styles.section}`}>
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px] mb-12">
-              {data &&
-                data.map((i, index) => <ProductCard data={i} key={index} />)}
+              {data.length > 0 ? (
+                data.map((i, index) => (
+                  <ProductCard data={i} key={i._id || index} /> // Sử dụng _id nếu có
+                ))
+              ) : (
+                <h1 className="text-center w-full pb-[100px] text-[20px]">
+                  Không tìm thấy sản phẩm nào!
+                </h1>
+              )}
             </div>
-            {data && data.length === 0 ? (
-              <h1 className="text-center w-full pb-[100px] text-[20px]">
-                Không tìm thấy sản phẩm nào!
-              </h1>
-            ) : null}
           </div>
           <Footer />
+        </div>
+      )}
+      {error && (
+        <div className="text-center text-red-500">
+          {error}
         </div>
       )}
     </>

@@ -4,104 +4,92 @@ import React, { useEffect } from "react";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAllProductsShop } from "../../redux/actions/productActions";
-import { deleteProduct } from "../../redux/actions/productActions";
+import { getAllProductsShop, deleteProduct } from "../../redux/actions/productActions";
 import Loader from "../Layout/Loader";
 
 const AllProducts = () => {
-  const { products, isLoading } = useSelector((state) => state.products);
+  const { allProducts, isLoading } = useSelector((state) => state.products); // Sử dụng allProducts
   const { seller } = useSelector((state) => state.seller);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllProductsShop(seller._id));
-  }, [dispatch]);
+    if (seller?._id) {
+      dispatch(getAllProductsShop(seller._id));
+    }
+  }, [dispatch, seller._id]);
+
+  useEffect(() => {
+    console.log("All Products:", allProducts); // Kiểm tra giá trị của allProducts
+    console.log("IsLoading:", isLoading);
+  }, [allProducts, isLoading]);
 
   const handleDelete = (id) => {
     dispatch(deleteProduct(id));
-    window.location.reload();
   };
 
   const columns = [
-    { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
+    { field: "id", headerName: "Id sản phẩm", minWidth: 150, flex: 0.7 },
     {
       field: "name",
-      headerName: "Name",
+      headerName: "Tên sản phẩm",
       minWidth: 180,
       flex: 1.4,
     },
     {
       field: "price",
-      headerName: "Price",
+      headerName: "Giá",
       minWidth: 100,
       flex: 0.6,
     },
     {
-      field: "Stock",
-      headerName: "Stock",
+      field: "stock",
+      headerName: "Kho",
       type: "number",
       minWidth: 80,
       flex: 0.5,
     },
-
     {
       field: "sold",
-      headerName: "Sold out",
+      headerName: "Đã bán",
       type: "number",
       minWidth: 130,
       flex: 0.6,
     },
-    // {
-    //   field: "Preview",
-    //   flex: 0.8,
-    //   minWidth: 100,
-    //   headerName: "",
-    //   type: "number",
-    //   sortable: false,
-    //   renderCell: (params) => {
-    //     return (
-    //       <>
-    //         <Link to={`/product/${params.id}`}>
-    //           <Button>
-    //             <AiOutlineEye size={20} />
-    //           </Button>
-    //         </Link>
-    //       </>
-    //     );
-    //   },
-    // },
     {
-      field: "Delete",
+      field: "preview",
+      flex: 0.8,
+      minWidth: 100,
+      headerName: "",
+      sortable: false,
+      renderCell: (params) => (
+        <Link to={`/product/${params.row.id}?isEvent=true`}>
+          <Button>
+            <AiOutlineEye size={20} />
+          </Button>
+        </Link>
+      ),
+    },
+    {
+      field: "delete",
       flex: 0.8,
       minWidth: 120,
       headerName: "",
-      type: "number",
       sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Button onClick={() => handleDelete(params.id)}>
-              <AiOutlineDelete size={20} />
-            </Button>
-          </>
-        );
-      },
+      renderCell: (params) => (
+        <Button onClick={() => handleDelete(params.row.id)}>
+          <AiOutlineDelete size={20} />
+        </Button>
+      ),
     },
   ];
 
-  const row = [];
-
-  products &&
-    products.forEach((item) => {
-      row.push({
-        id: item._id,
-        name: item.name,
-        price: item.discountPrice + "vnd",
-        Stock: item.stock,
-        sold: item.sold_out,
-      });
-    });
+  const rows = Array.isArray(allProducts) ? allProducts.map((item) => ({
+    id: item._id,
+    name: item.name,
+    price: `${item.discountPrice} vnd`,
+    stock: item.stock,
+    sold: item.sold_out,
+  })) : [];
 
   return (
     <>
@@ -110,7 +98,7 @@ const AllProducts = () => {
       ) : (
         <div className="w-full mx-8 pt-1 mt-10 bg-white">
           <DataGrid
-            rows={row}
+            rows={rows}
             columns={columns}
             pageSize={10}
             disableSelectionOnClick

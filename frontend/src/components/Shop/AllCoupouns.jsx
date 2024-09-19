@@ -81,7 +81,7 @@ const AllCoupouns = () => {
     },
     {
       field: "price",
-      headerName: "Value",
+      headerName: "Giá trị",
       minWidth: 100,
       flex: 0.6,
     },
@@ -179,7 +179,7 @@ const AllCoupouns = () => {
                       required
                       className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       onChange={(e) => setValue(e.target.value)}
-                      placeholder="Nhập giá trị mã phiếu giảm giá..."
+                      placeholder="Nhập giá trị mã giảm giá..."
                     />
                   </div>
                   <br />

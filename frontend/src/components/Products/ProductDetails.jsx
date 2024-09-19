@@ -8,8 +8,8 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProductsShop } from "../../redux/actions/productActions";
-import { backend_url, server } from "../../server";
+import { getAllProducts } from "../../redux/actions/productActions";
+import { backend_url } from "../../server";
 import {
   addToWishlist,
   removeFromWishlist,
@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 const ProductDetails = ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
-  const { products } = useSelector((state) => state.products);
+  const { allProducts } = useSelector((state) => state.products);
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
@@ -28,37 +28,34 @@ const ProductDetails = ({ data }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllProductsShop(data && data?.shop._id));
+    console.log("Dữ liệu sản phẩm:", data);
+    if (data?.shop?._id) {
+      dispatch(getAllProducts(data.shop._id));
+    }
     if (wishlist && wishlist.find((i) => i._id === data?._id)) {
       setClick(true);
     } else {
       setClick(false);
     }
-  }, [data, wishlist]);
+  }, [data, wishlist, dispatch]);
 
-  const incrementCount = () => {
-    setCount(count + 1);
-  };
+  const incrementCount = () => setCount(count + 1);
   const decrementCount = () => {
-    if (count > 1) {
-      setCount(count - 1);
-    }
+    if (count > 1) setCount(count - 1);
   };
 
-  const removeFromWishlistHandler = (data) => {
+  const removeFromWishlistHandler = () => {
     setClick(!click);
     dispatch(removeFromWishlist(data));
   };
 
-  const addToWishlistHandler = (data) => {
+  const addToWishlistHandler = () => {
     setClick(!click);
     dispatch(addToWishlist(data));
   };
 
-  // Add to cart
-  const addToCartHandler = (id) => {
-    const isItemExists = cart && cart.find((i) => i._id === id);
-
+  const addToCartHandler = () => {
+    const isItemExists = cart && cart.find((i) => i._id === data._id);
     if (isItemExists) {
       toast.error("Sản phẩm đã có trong giỏ hàng!");
     } else {
@@ -79,47 +76,42 @@ const ProductDetails = ({ data }) => {
   return (
     <div className="bg-white">
       {data ? (
-        <div className={`${styles.section} w-[90%] 800px:w-[80%] `}>
+        <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
           <div className="w-full py-5">
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
                 <img
-                  src={`${backend_url}${data && data.images[select]}`}
-                  alt=""
+                  src={`${backend_url}${data.images[select]}`}
+                  alt={data.name}
                   className="w-[80%]"
                 />
                 <div className="w-full flex">
-                  {data &&
-                    data.images.map((i, index) => (
-                      <div
-                        className={`${
-                          select === 0 ? "border" : "null"
-                        } cursor-pointer`}
-                      >
-                        <img
-                          src={`${backend_url}${i}`}
-                          alt=""
-                          className="h-[200px] overflow-hidden mr-3 mt-3"
-                          onClick={() => setSelect(index)}
-                        />
-                      </div>
-                    ))}
-                  <div
-                    className={`${
-                      select === 1 ? "border" : "null"
-                    } cursor-pointer `}
-                  ></div>
+                  {data.images.map((image, index) => (
+                    <div
+                      key={index} // Cần thêm key để không gặp cảnh báo
+                      className={`cursor-pointer ${
+                        select === index ? "border" : ""
+                      }`}
+                    >
+                      <img
+                        src={`${backend_url}${image}`}
+                        alt=""
+                        className="h-[200px] overflow-hidden mr-3 mt-3"
+                        onClick={() => setSelect(index)}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="w-full 800px:w-[50%] pt-5 ">
+              <div className="w-full 800px:w-[50%] pt-5">
                 <h1 className={`${styles.productTitle}`}>{data.name}</h1>
                 <p>{data.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    {data.discountPrice}vnd
+                    {data.discountPrice} vnd
                   </h4>
                   <h3 className={`${styles.price}`}>
-                    {data.originalPrice ? data.originalPrice + "vnd" : null}
+                    {data.originalPrice ? data.originalPrice + " vnd" : null}
                   </h3>
                 </div>
 
@@ -149,15 +141,15 @@ const ProductDetails = ({ data }) => {
                       <AiFillHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={() => removeFromWishlistHandler(data)}
-                        color={click ? "red" : "#333"}
+                        onClick={removeFromWishlistHandler}
+                        color="red"
                         title="Xóa khỏi danh sách yêu thích"
                       />
                     ) : (
                       <AiOutlineHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={() => addToWishlistHandler(data)}
+                        onClick={addToWishlistHandler}
                         title="Thêm vào yêu thích"
                       />
                     )}
@@ -165,26 +157,26 @@ const ProductDetails = ({ data }) => {
                 </div>
                 <div
                   className={`${styles.button} !mt-6 !rounded !h-11 flex items-center`}
-                  onClick={() => addToCartHandler(data._id)}
+                  onClick={addToCartHandler}
                 >
                   <span className="text-white flex items-center">
                     Thêm vào giỏ hàng <AiOutlineShoppingCart className="ml-1" />
                   </span>
                 </div>
                 <div className="flex items-center pt-8">
-                  <Link to={`/shop/preview/${data?.shop._id}`}>
+                  <Link to={`/shop/preview/${data.shop._id}`}>
                     <img
-                      src={`${backend_url}${data?.shop?.avatar}`}
+                      src={`${backend_url}${data.shop.avatar}`}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
                   </Link>
 
                   <div className="pr-8">
-                  <Link to={`/shop/preview/${data?.shop._id}`}>
-                    <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                      {data.shop.name}
-                    </h3>
+                    <Link to={`/shop/preview/${data.shop._id}`}>
+                      <h3 className={`${styles.shop_name} pb-1 pt-1`}>
+                        {data.shop.name}
+                      </h3>
                     </Link>
                     <h5 className="pb-3 text-[15px]">(4/5) Đánh giá</h5>
                   </div>
@@ -202,118 +194,58 @@ const ProductDetails = ({ data }) => {
             </div>
           </div>
 
-          <ProductDetailsInfo data={data} products={products} />
+          <ProductDetailsInfo data={data} allProducts={allProducts} />
           <br />
           <br />
         </div>
-      ) : null}
+      ) : (
+        <p className="text-center">Đang tải thông tin sản phẩm...</p>
+      )}
     </div>
   );
 };
 
-const ProductDetailsInfo = ({ data, products }) => {
+const ProductDetailsInfo = ({ data, allProducts }) => {
   const [active, setActive] = useState(1);
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded">
       <div className="w-full flex justify-between border-b pt-10 pb-2">
-        <div className="relative">
-          <h5
-            className={
-              "text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
-            }
-            onClick={() => setActive(1)}
-          >
-            Chi tiết sản phẩm
-          </h5>
-          {active === 1 ? (
-            <div className={`${styles.active_indicator}`} />
-          ) : null}
-        </div>
-        <div className="relative">
-          <h5
-            className={
-              "text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
-            }
-            onClick={() => setActive(2)}
-          >
-            Đánh giá sản phẩm
-          </h5>
-          {active === 2 ? (
-            <div className={`${styles.active_indicator}`} />
-          ) : null}
-        </div>
-        <div className="relative">
-          <h5
-            className={
-              "text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
-            }
-            onClick={() => setActive(3)}
-          >
-            Thông tin người bán
-          </h5>
-          {active === 3 ? (
-            <div className={`${styles.active_indicator}`} />
-          ) : null}
-        </div>
-      </div>
-      {active === 1 ? (
-        <>
-          <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-            {data.description}
-          </p>
-        </>
-      ) : null}
-
-      {active === 2 ? (
-        <div className="w-full justify-center min-h-[40vh] flex items-center">
-          <p>Chưa có đánh giá nào!</p>
-        </div>
-      ) : null}
-
-      {active === 3 && (
-        <div className="w-full block 800px:flex p-5">
-          <div className="w-full 800px:w-[50%]">
-            <Link to={`/shop/preview/${data.shop._id}`}>
-              <div className="flex items-center">
-                <img
-                  src={`${backend_url}${data?.shop?.avatar}`}
-                  className="w-[50px] h-[50px] rounded-full"
-                  alt=""
-                />
-                <div className="pl-3">
-                  <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                  <h5 className="pb-2 text-[15px]">(4/5) Xếp hạng</h5>
-                </div>
-              </div>
-            </Link>
-            <p className="pt-2">{data.shop.description}</p>
-          </div>
-          <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
-            <div className="text-left">
-              <h5 className="font-[600]">
-                Đã tham gia vào:
-                <span className="font-[500]">
-                  {data.shop?.createdAt?.slice(0, 10)}
-                </span>
+        {["Chi tiết sản phẩm", "Đánh giá sản phẩm", "Thông tin người bán"].map(
+          (title, index) => (
+            <div className="relative" key={index}>
+              <h5
+                className="text-[#000] text-[18px] px-1 leading-5 font-[600] cursor-pointer 800px:text-[20px]"
+                onClick={() => setActive(index + 1)}
+              >
+                {title}
               </h5>
-              <h5 className="font-[600] pt-3">
-                Tổng số sản phẩm:{" "}
-                <span className="font-[500]">
-                  {products && products.length}
-                </span>
-              </h5>
-              <h5 className="font-[600] pt-3">
-                Tổng số đánh giá: <span className="font-[500]">324</span>
-              </h5>
-              <Link to="/">
-                <div
-                  className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}
-                >
-                  <h4 className="text-white">Ghé thăm cửa hàng</h4>
-                </div>
-              </Link>
+              {active === index + 1 && (
+                <div className={`${styles.active_indicator}`} />
+              )}
             </div>
-          </div>
+          )
+        )}
+      </div>
+      {active === 1 && (
+        <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
+          {data.description}
+        </p>
+      )}
+      {active === 2 && (
+        <div className="flex flex-col">
+          <h2>Chưa có đánh giá nào</h2>
+          <p className="text-sm text-gray-500">
+            Hãy là người đầu tiên đánh giá sản phẩm này!
+          </p>
+        </div>
+      )}
+      {active === 3 && (
+        <div>
+          <h2 className="text-lg font-bold">{data.shop.name}</h2>
+          <p>{data.shop.description}</p>
+          <h5 className="text-sm text-gray-500">
+            Liên hệ: {data.shop.contact}
+          </h5>
         </div>
       )}
     </div>

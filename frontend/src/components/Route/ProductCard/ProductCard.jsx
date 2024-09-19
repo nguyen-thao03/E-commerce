@@ -18,6 +18,7 @@ import {
 } from "../../../redux/actions/wishlistActions.js";
 import { addToCart } from "../../../redux/actions/cartActions.js";
 import toast from "react-hot-toast";
+import Ratings from "../../Products/Ratings";
 
 const ProductCard = ({ data, isEvent }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -67,9 +68,7 @@ const ProductCard = ({ data, isEvent }) => {
         <div className="flex justify-end"></div>
 
         <Link
-          to={`
-              /product/${data._id}
-          `}
+          to={`${isEvent === true ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}
         >
           <img
             src={`${backend_url}${data.images && data.images[0]}`}
@@ -77,7 +76,7 @@ const ProductCard = ({ data, isEvent }) => {
             className="w-full h-[170px] object-contain"
           />
         </Link>
-        <Link to={`/shop/preview/${data?.shop._id}`}>
+        <Link to={`${isEvent === true ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}>
           <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
         </Link>
         <Link to={`/product/${data._id}`}>

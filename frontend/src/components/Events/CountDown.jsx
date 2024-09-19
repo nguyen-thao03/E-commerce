@@ -27,8 +27,13 @@ const CountDown = ({ data }) => {
   }, [timeLeft, data]); // Dependency array
 
   function calculateTimeLeft() {
-    // Replace with your event date
-    const eventDate = new Date('2024-09-18');
+    // Sử dụng định dạng ngày dd/mm/yyyy
+    const eventDateString = '18/09/2024';
+    
+    // Chuyển đổi chuỗi dd/mm/yyyy thành một đối tượng Date hợp lệ
+    const [day, month, year] = eventDateString.split('/');
+    const eventDate = new Date(`${year}-${month}-${day}T00:00:00`);
+    
     const difference = eventDate - new Date();
     let timeLeft = {};
 

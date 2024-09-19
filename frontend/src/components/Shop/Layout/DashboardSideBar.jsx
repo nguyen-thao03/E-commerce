@@ -38,7 +38,7 @@ const DashboardSideBar = ({ active }) => {
                         className={`hidden 800px:block pl-2 text-[18px] font-[400] ${active === 2 ? "text-[crimson]" : "text-[#555]"
                             }`}
                     >
-                        All Orders
+                        Tất cả đơn hàng
                     </h5>
                 </Link>
             </div>
@@ -50,7 +50,7 @@ const DashboardSideBar = ({ active }) => {
                         className={`hidden 800px:block pl-2 text-[18px] font-[400] ${active === 3 ? "text-[crimson]" : "text-[#555]"
                             }`}
                     >
-                        All Products
+                        Tất cả sản phẩm
                     </h5>
                 </Link>
             </div>
@@ -68,7 +68,7 @@ const DashboardSideBar = ({ active }) => {
                         className={`hidden 800px:block pl-2 text-[18px] font-[400] ${active === 4 ? "text-[crimson]" : "text-[#555]"
                             }`}
                     >
-                        Create Product
+                        Thêm sản phẩm
                     </h5>
                 </Link>
             </div>

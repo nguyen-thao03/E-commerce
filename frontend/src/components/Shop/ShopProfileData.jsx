@@ -7,15 +7,23 @@ import ProductCard from "../Route/ProductCard/ProductCard";
 import { getAllEventsShop } from "../../redux/actions/eventActions";
 
 const ShopProfileData = ({ isOwner }) => {
-  const { products } = useSelector((state) => state.products);
+  const { allProducts } = useSelector((state) => state.products);
   const { events } = useSelector((state) => state.events);
   const { seller } = useSelector((state) => state.seller);
   const { id } = useParams();
 
+  console.log("Products:", allProducts); // Thêm dòng này
+  console.log("Events:", events);     // Thêm dòng này
+
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllEventsShop(seller._id));
-  }, [dispatch]);
+    dispatch(getAllProductsShop(seller._id)).then((response) => {
+      console.log("Product API Response:", response);
+    });
+    dispatch(getAllEventsShop(seller._id)).then((response) => {
+      console.log("Event API Response:", response);
+    });
+  }, [dispatch, seller._id]);
 
   const [active, setActive] = useState(1);
 
@@ -68,11 +76,18 @@ const ShopProfileData = ({ isOwner }) => {
       <br />
 
       {active === 1 && (
+        <div className="w-full">
         <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
-          {products &&
-            products.map((i, index) => (
+          {allProducts &&
+            allProducts.map((i, index) => (
               <ProductCard data={i} key={index} isShop={true} />
             ))}
+        </div>
+         {allProducts && allProducts.length === 0 && (
+          <h5 className="w-full text-center py-5 text-[18px]">
+            Không có sản phẩm nào cho cửa hàng này!
+          </h5>
+        )}
         </div>
       )}
 

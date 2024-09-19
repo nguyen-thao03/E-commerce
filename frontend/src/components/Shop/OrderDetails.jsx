@@ -6,6 +6,7 @@ import  toast  from "react-hot-toast";
 import axios from "axios";
 import { backend_url, server } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
+import { getAllOrdersOfShop } from "../../redux/actions/orderActions";
 
 const OrderDetails = () => {
   const { orders, isLoading } = useSelector((state) => state.order);

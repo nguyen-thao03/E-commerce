@@ -4,7 +4,6 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const router = express.Router();
 const { isSeller } = require("../middleware/auth");
 const CoupounCode = require("../model/coupounCodeModel");
-
 // create coupoun code
 router.post(
   "/create-coupoun-code",

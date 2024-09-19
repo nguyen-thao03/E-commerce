@@ -2,6 +2,11 @@ import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoading: true,
+  allProducts: [], 
+  product: null,
+  success: false,
+  error: null,
+  message: null,
 };
 
 export const productReducer = createReducer(initialState, (builder) => {
@@ -20,20 +25,20 @@ export const productReducer = createReducer(initialState, (builder) => {
       state.success = false;
     })
 
-    // get all products of shop
+    // Get all products of shop
     .addCase("getAllProductsShopRequest", (state) => {
       state.isLoading = true;
     })
     .addCase("getAllProductsShopSuccess", (state, action) => {
       state.isLoading = false;
-      state.allProducts = action.payload;
+      state.allProducts = action.payload; // Cập nhật `allProducts`
     })
     .addCase("getAllProductsShopFailed", (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     })
 
-    //delete product of a shop
+    // Delete product of a shop
     .addCase("deleteProductRequest", (state) => {
       state.isLoading = true;
     })

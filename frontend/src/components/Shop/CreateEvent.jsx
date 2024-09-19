@@ -17,30 +17,29 @@ const CreateEvent = () => {
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState("");
     const [tags, setTags] = useState("");
-    const [originalPrice, setOriginalPrice] = useState();
-    const [discountPrice, setDiscountPrice] = useState();
-    const [stock, setStock] = useState("");
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+    const [originalPrice, setOriginalPrice] = useState(0);  
+    const [discountPrice, setDiscountPrice] = useState(0);  
+    const [stock, setStock] = useState(0);  
+    const [startDate, setStartDate] = useState(""); 
+    const [endDate, setEndDate] = useState(""); 
 
     const handleStartDateChange = (e) => {
         const startDate = new Date(e.target.value);
         const minEndDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
-        setStartDate(startDate);
-        setEndDate(null);
+        setStartDate(e.target.value);
+        setEndDate("");
         document.getElementById("end-date").min = minEndDate.toISOString().slice(0, 10);
-
-
     }
 
     const handleEndDateChange = (e) => {
-        const endDate = new Date(e.target.value);
-        setEndDate(endDate);
+        setEndDate(e.target.value);
     };
 
     const today = new Date().toISOString().slice(0, 10);
 
-    const minEndDate = startDate ? new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10) : "";
+    const minEndDate = startDate
+        ? new Date(new Date(startDate).getTime() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+        : "";
 
     useEffect(() => {
         if (error) {
@@ -55,16 +54,12 @@ const CreateEvent = () => {
 
     const handleImageChange = (e) => {
         e.preventDefault();
-
         let files = Array.from(e.target.files);
         setImages((prevImages) => [...prevImages, ...files]);
     };
 
-
-
     const handleSubmit = (e) => {
         e.preventDefault();
-
         const newForm = new FormData();
 
         images.forEach((image) => {
@@ -82,7 +77,6 @@ const CreateEvent = () => {
         newForm.append("Finish_Date", new Date(endDate).toISOString());
         dispatch(createEvent(newForm));
     };
-
     return (
         <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
             <h5 className="text-[30px] font-Poppins text-center">Thêm sự kiện</h5>
@@ -199,7 +193,7 @@ const CreateEvent = () => {
                         type="date"
                         name="start-date"
                         id="start-date"
-                        value={startDate}
+                        value={startDate || ""}  // Sử dụng chuỗi rỗng nếu giá trị là undefined
                         className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         onChange={handleStartDateChange}
                         min={today}
@@ -214,13 +208,13 @@ const CreateEvent = () => {
                         type="date"
                         name="end-date"
                         id="end-date"
-                        value={endDate}
+                        value={endDate || ""}  // Sử dụng chuỗi rỗng nếu giá trị là undefined
                         className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         onChange={handleEndDateChange}
                         min={minEndDate}
                     />
                 </div>
-                <br />
+                <br/>
                 <div>
                     <label className="pb-2">
                         Upload Images <span className="text-red-500">*</span>
@@ -251,7 +245,7 @@ const CreateEvent = () => {
                     <div>
                         <input
                             type="submit"
-                            value="Create"
+                            value="Thêm"
                             className="mt-2 cursor-pointer appearance-none text-center block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         />
                     </div>
