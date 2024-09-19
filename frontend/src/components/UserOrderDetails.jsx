@@ -53,7 +53,7 @@ const UserOrderDetails = () => {
       setOpen(false);
     } catch (error) {
       console.error(error); // Log the error to the console for debugging
-      toast.error("An error occurred. Please try again."); // Display a generic error message
+      toast.error("Đã xảy ra lỗi. Vui lòng thử lại."); // Display a generic error message
     }
   };
 
@@ -68,7 +68,7 @@ const UserOrderDetails = () => {
   const refundHandler = async () => {
     await axios
       .put(`${server}/order/order-refund/${id}`, {
-        status: "Processing refund",
+        status: "Đang xử lý tiền hoàn lại",
       })
       .then((res) => {
         toast.success(res.data.message);
@@ -84,16 +84,16 @@ const UserOrderDetails = () => {
       <div className="w=full flex items-center justify-between">
         <div className="flex items-center">
           <BsFillBagFill size={30} color="crimson" />
-          <h1 className="pl-2 text-[25px]">Order Details</h1>
+          <h1 className="pl-2 text-[25px]">Chi tiết đơn hàng</h1>
         </div>
       </div>
 
       <div className="w-full flex items-center justify-between pt-6">
         <h5 className="text-[#00000084]">
-          order ID: <span>#{data?._id?.slice(0, 8)}</span>
+          Mã vận chuyển: <span>#{data?._id?.slice(0, 8)}</span>
         </h5>
         <h5 className="text-[#000000084]">
-          Placed On: <span>{data?.createdAt?.slice(0, 10)}</span>
+          Đặt ngày: <span>{data?.createdAt?.slice(0, 10)}</span>
         </h5>
       </div>
 
@@ -112,15 +112,15 @@ const UserOrderDetails = () => {
               <div className="w-full">
                 <h5 className="pl-3 text-[20px]">{item.name}</h5>
                 <h5 className="pl-3 text-[20px] text-[#00000091]">
-                  US${item.discountPrice} x {item.qty}
+                  {item.discountPrice} Vnd x {item.qty}
                 </h5>
               </div>
-              {!item.isReviewed && data?.status === "Delivered" ? (
+              {!item.isReviewed && data?.status === "Đã giao hàng" ? (
                 <div
                   className={`${styles.button} text-[#fff]`}
                   onClick={() => setOpen(true) || setSelectedItem(item)}
                 >
-                  write a review
+                  Đánh giá
                 </div>
               ) : null}
             </div>
@@ -139,7 +139,7 @@ const UserOrderDetails = () => {
               />
             </div>
             <h2 className="text-[30px] font-[500] font-Poppins text-center">
-              Give a Review
+              Đưa ra đánh giá
             </h2>
             <br />
             <div className="w-full flex">
@@ -151,7 +151,7 @@ const UserOrderDetails = () => {
               <div>
                 <div className="pl-3 text-[20px]">{selectedItem?.name}</div>
                 <h4 className="pl-3 text-[20px]">
-                  US${selectedItem?.discountPrice} x {selectedItem?.qty}
+                  {selectedItem?.discountPrice} Vnd x {selectedItem?.qty}
                 </h4>
               </div>
             </div>
@@ -161,7 +161,7 @@ const UserOrderDetails = () => {
 
             {/* Rating */}
             <h5 className="pl-3 text-[20px] font-[500]">
-              Give a Rating <span className="text-red-500">*</span>
+              Đánh giá <span className="text-red-500">*</span>
             </h5>
             <div className="flex w-fit ml-2 pt-1">
               {[1, 2, 3, 4, 5].map((i) =>
@@ -188,9 +188,9 @@ const UserOrderDetails = () => {
             {/* Comment */}
             <div className="w-full ml-3">
               <label className="block text-[20px] font-[500]">
-                Write a Comment
+                Viết bình luận
                 <span className="ml-1 font-[400] text-[16px] text-[#00000052]">
-                  (Optional)
+                  (Không bắt buộc)
                 </span>
               </label>
               <textarea
@@ -200,7 +200,7 @@ const UserOrderDetails = () => {
                 rows="5"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="How was your product? write your expresion about it!"
+                placeholder="Sản phẩm của bạn thế nào?...!"
                 className="mt-2 w-[95%] border p-2 outline-none"
               ></textarea>
             </div>
@@ -208,7 +208,7 @@ const UserOrderDetails = () => {
               className={`${styles.button} text-white text-[20px] ml-3`}
               onClick={rating > 1 ? combinedHandler : null}
             >
-              Submit
+              Gửi
             </div>
           </div>
         </div>
@@ -216,7 +216,7 @@ const UserOrderDetails = () => {
 
       <div className="border-t w-full text-right">
         <h5>
-          Total Price: <strong>US${data?.totalPrice}</strong>
+          Tổng tiền: <strong>{data?.totalPrice} Vnd</strong>
         </h5>
       </div>
       <br />
@@ -226,7 +226,7 @@ const UserOrderDetails = () => {
 
       <div className="w-full 800px:flex items-center">
         <div className="w-full 800px:w-[60%]">
-          <h4 className="pt-3 text-[20px] font-[600]">Shipping Address:</h4>
+          <h4 className="pt-3 text-[20px] font-[600]">Địa chỉ giao hàng:</h4>
 
           <h4 className="pt-3 text-[20px]">
             {data?.shippingAddress.address1 +
@@ -240,20 +240,20 @@ const UserOrderDetails = () => {
         </div>
 
         <div className="w-full 800px:w-[40%]">
-          <h4 className="pt-3 text-[20px]">Payment Info:</h4>
+          <h4 className="pt-3 text-[20px]">Thông tin thanh toán:</h4>
           <h4>
-            Status:{" "}
+            Trạng thái:{" "}
             {/* checks if the `status` property exists
                      in the `paymentInfo` object within the `data` object. */}
-            {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Not Paid"}
+            {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Chưa thanh toán"}
           </h4>
           <br />
-          {data?.status === "Delivered" && (
+          {data?.status === "Đã giao" && (
             <div
               className={`${styles.button} text-white`}
               onClick={refundHandler}
             >
-              Give a Refund
+              Hoàn lại tiền
             </div>
           )}
         </div>
@@ -261,7 +261,7 @@ const UserOrderDetails = () => {
       <br />
 
       <Link to="/">
-        <div className={`${styles.button} text-white`}>Send Message</div>
+        <div className={`${styles.button} text-white`}>Gửi tin nhắn</div>
       </Link>
       <br />
       <br />

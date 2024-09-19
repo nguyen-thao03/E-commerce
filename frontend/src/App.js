@@ -56,17 +56,17 @@ const ShopSettingsPage = React.lazy(() =>
 //const ShopWithDrawMoneyPage = React.lazy(() => import("./pages/Shop/ShopWithDrawMoneyPage"));
 //const ShopInboxPage = React.lazy(() => import("./pages/Shop/ShopInboxPage"));
 
-const AdminDashboardPage = React.lazy(() => import("./pages/AdminDashboardPage"));
-const AdminDashboardUsers = React.lazy(() => import("./pages/AdminDashboardUsers"));
-const AdminDashboardSellers = React.lazy(() => import("./pages/AdminDashboardSellers"));
-const AdminDashboardOrders = React.lazy(() => import("./pages/AdminDashboardOrders"));
-const AdminDashboardProducts = React.lazy(() => import("./pages/AdminDashboardProducts"));
-const AdminDashboardEvents = React.lazy(() => import("./pages/AdminDashboardEvents"));
+// const AdminDashboardPage = React.lazy(() => import("./pages/AdminDashboardPage"));
+// const AdminDashboardUsers = React.lazy(() => import("./pages/AdminDashboardUsers"));
+// const AdminDashboardSellers = React.lazy(() => import("./pages/AdminDashboardSellers"));
+// const AdminDashboardOrders = React.lazy(() => import("./pages/AdminDashboardOrders"));
+// const AdminDashboardProducts = React.lazy(() => import("./pages/AdminDashboardProducts"));
+// const AdminDashboardEvents = React.lazy(() => import("./pages/AdminDashboardEvents"));
 //const AdminDashboardWithdraw = React.lazy(() => import("./pages/AdminDashboardWithdraw"));
 
 import { loadSeller, loadUser } from "./redux/actions/userActions";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
+//import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
 import { ShopHomePage } from "./ShopRoutes";
 import { getAllProducts } from "./redux/actions/productActions";
@@ -290,7 +290,7 @@ const App = () => {
           />
 
           {/* Admin Routes */}
-        <Route
+        {/* <Route
           path="/admin/dashboard"
           element={
             <ProtectedAdminRoute>
@@ -337,7 +337,7 @@ const App = () => {
               <AdminDashboardEvents />
             </ProtectedAdminRoute>
           }
-        />
+        /> */}
         {/* <Route
           path="/admin-withdraw-request"
           element={

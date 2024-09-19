@@ -23,7 +23,7 @@ const DashboardSideBar = ({ active }) => {
                         className={`hidden 800px:block pl-2 text-[18px] font-[400] ${active === 1 ? "text-[crimson]" : "text-[#555]"
                             }`}
                     >
-                        Dashboard
+                        Bnarg điều khiển
                     </h5>
                 </Link>
             </div>
@@ -83,7 +83,7 @@ const DashboardSideBar = ({ active }) => {
                         className={`hidden 800px:block pl-2 text-[18px] font-[400] ${active === 5 ? "text-[crimson]" : "text-[#555]"
                             }`}
                     >
-                        All Events
+                        Tất cả sự kiện
                     </h5>
                 </Link>
             </div>
@@ -98,7 +98,7 @@ const DashboardSideBar = ({ active }) => {
                         className={`hidden 800px:block pl-2 text-[18px] font-[400] ${active === 6 ? "text-[crimson]" : "text-[#555]"
                             }`}
                     >
-                        Create Event
+                        Thêm sự kiện
                     </h5>
                 </Link>
             </div>
@@ -116,7 +116,7 @@ const DashboardSideBar = ({ active }) => {
                         className={`hidden 800px:block pl-2 text-[18px] font-[400] ${active === 7 ? "text-[crimson]" : "text-[#555]"
                             }`}
                     >
-                        Withdraw Money
+                        Rút tiền
                     </h5>
                 </Link>
             </div>
@@ -131,7 +131,7 @@ const DashboardSideBar = ({ active }) => {
                         className={`hidden 800px:block pl-2 text-[18px] font-[400] ${active === 8 ? "text-[crimson]" : "text-[#555]"
                             }`}
                     >
-                        Shop Inbox
+                        Tin nhắn Shop
                     </h5>
                 </Link>
             </div>
@@ -146,7 +146,7 @@ const DashboardSideBar = ({ active }) => {
                         className={`hidden 800px:block pl-2 text-[18px] font-[400] ${active === 9 ? "text-[crimson]" : "text-[#555]"
                             }`}
                     >
-                        Discount Codes
+                        Mã giảm giá
                     </h5>
                 </Link>
             </div>
@@ -161,7 +161,7 @@ const DashboardSideBar = ({ active }) => {
                         className={`hidden 800px:block pl-2 text-[18px] font-[400] ${active === 10 ? "text-[crimson]" : "text-[#555]"
                             }`}
                     >
-                        Refunds
+                        Hoàn tiền
                     </h5>
                 </Link>
             </div>
@@ -176,7 +176,7 @@ const DashboardSideBar = ({ active }) => {
                         className={`hidden 800px:block pl-2 text-[18px] font-[400] ${active === 11 ? "text-[crimson]" : "text-[#555]"
                             }`}
                     >
-                        Settings
+                        Cài đặt
                     </h5>
                 </Link>
             </div>

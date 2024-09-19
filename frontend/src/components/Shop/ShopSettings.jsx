@@ -14,7 +14,7 @@ const ShopSettings = () => {
     const [description, setDescription] = useState(seller && seller.description ? seller.description : "");
     const [address, setAddress] = useState(seller && seller.address);
     const [phoneNumber, setPhoneNumber] = useState(seller && seller.phoneNumber);
-    const [zipCode, setZipcode] = useState(seller && seller.zipCode);
+    //const [zipCode, setZipcode] = useState(seller && seller.zipCode);
 
 
     const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const ShopSettings = () => {
             withCredentials: true,
         }).then((res) => {
             dispatch(loadSeller());
-            toast.success("Avatar updated successfully!")
+            toast.success("Cập nhật ảnh đại diện thành công!")
         }).catch((error) => {
             toast.error(error.response.data.message);
         })
@@ -49,11 +49,11 @@ const ShopSettings = () => {
         await axios.put(`${server}/shop/update-seller-info`, {
             name,
             address,
-            zipCode,
+            //zipCode,
             phoneNumber,
             description,
         }, { withCredentials: true }).then((res) => {
-            toast.success("Shop info updated succesfully!");
+            toast.success("Cập nhật thông tin shop thành công!");
             dispatch(loadSeller());
         }).catch((error) => {
             toast.error(error.response.data.message);
@@ -96,7 +96,7 @@ const ShopSettings = () => {
                 >
                     <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
                         <div className="w-full pl-[3%]">
-                            <label className="block pb-2">Shop Name</label>
+                            <label className="block pb-2">Tên Shop</label>
                         </div>
                         <input
                             type="name"
@@ -109,13 +109,13 @@ const ShopSettings = () => {
                     </div>
                     <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
                         <div className="w-full pl-[3%]">
-                            <label className="block pb-2">Shop description</label>
+                            <label className="block pb-2">Mô tả Shop</label>
                         </div>
                         <input
                             type="name"
                             placeholder={`${seller?.description
                                 ? seller.description
-                                : "Enter your shop description"
+                                : "Nhập mô tả Shop"
                                 }`}
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
@@ -124,7 +124,7 @@ const ShopSettings = () => {
                     </div>
                     <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
                         <div className="w-full pl-[3%]">
-                            <label className="block pb-2">Shop Address</label>
+                            <label className="block pb-2">Địa chỉ</label>
                         </div>
                         <input
                             type="name"
@@ -138,7 +138,7 @@ const ShopSettings = () => {
 
                     <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
                         <div className="w-full pl-[3%]">
-                            <label className="block pb-2">Shop Phone Number</label>
+                            <label className="block pb-2">Số điện thoại</label>
                         </div>
                         <input
                             type="number"
@@ -150,7 +150,7 @@ const ShopSettings = () => {
                         />
                     </div>
 
-                    <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
+                    {/* <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
                         <div className="w-full pl-[3%]">
                             <label className="block pb-2">Shop Zip Code</label>
                         </div>
@@ -162,12 +162,12 @@ const ShopSettings = () => {
                             className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                             required
                         />
-                    </div>
+                    </div> */}
 
                     <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
                         <input
                             type="submit"
-                            value="Update Shop"
+                            value="Cập nhật"
                             className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                             required
                             readOnly

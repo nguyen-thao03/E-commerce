@@ -396,7 +396,7 @@ const TrackOrder = () => {
       minWidth: 150,
       flex: 0.7,
       cellClassName: (params) => {
-        return params.value === "Delivered" ? "greenColor" : "redColor";
+        return params.value === "Đã giao" ? "greenColor" : "redColor";
       },
     },
     {
